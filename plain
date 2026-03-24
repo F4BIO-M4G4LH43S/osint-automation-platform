@@ -1,0 +1,80 @@
+osint-automation-platform/
+├── README.md
+├── requirements.txt
+├── setup.py
+├── install.sh
+├── config/
+│   ├── config.yaml.example
+│   └── logging.yaml
+├── osint_platform/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── engine.py          # Main orchestration engine
+│   │   ├── config_manager.py  # Configuration management
+│   │   └── logger.py          # Logging setup
+│   ├── modules/
+│   │   ├── __init__.py
+│   │   ├── shodan_module.py
+│   │   ├── virustotal_module.py
+│   │   ├── crtsh_module.py
+│   │   ├── dns_module.py
+│   │   ├── whois_module.py
+│   │   ├── webscraper_module.py
+│   │   └── wordpress_module.py
+│   ├── integrations/
+│   │   ├── __init__.py
+│   │   ├── siem/
+│   │   │   ├── __init__.py
+│   │   │   ├── splunk.py
+│   │   │   ├── sentinel.py
+│   │   │   ├── elastic.py
+│   │   │   └── qrader.py
+│   │   ├── soar/
+│   │   │   ├── __init__.py
+│   │   │   ├── phantom.py
+│   │   │   ├── xsoar.py
+│   │   │   └── tines.py
+│   │   └── ticketing/
+│   │       ├── __init__.py
+│   │       ├── servicenow.py
+│   │       └── jira.py
+│   ├── database/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   └── repository.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── server.py          # FastAPI REST API
+│   │   └── routes.py
+│   ├── cli/
+│   │   ├── __init__.py
+│   │   └── commands.py        # Click CLI interface
+│   └── utils/
+│       ├── __init__.py
+│       ├── validators.py
+│       ├── formatters.py
+│       └── helpers.py
+├── scripts/
+│   ├── install_dependencies.sh
+│   ├── setup_database.sh
+│   └── cron_setup.sh
+├── tests/
+│   ├── __init__.py
+│   ├── test_modules/
+│   └── test_integrations/
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── entrypoint.sh
+├── docs/
+│   ├── INSTALLATION.md
+│   ├── API_REFERENCE.md
+│   ├── INTEGRATION_GUIDE.md
+│   └── EXAMPLES.md
+└── .github/
+    ├── workflows/
+    │   ├── ci.yml
+    │   └── release.yml
+    ├── ISSUE_TEMPLATE.md
+    └── PULL_REQUEST_TEMPLATE.md
