@@ -1,0 +1,58 @@
+osint-automation-platform/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── deploy-web.yml
+│       └── deploy-mobile.yml
+├── backend/
+│   ├── osint_platform/
+│   │   ├── api/
+│   │   │   ├── mobile_routes.py      # Mobile-optimized endpoints
+│   │   │   ├── routes.py
+│   │   │   └── server.py
+│   │   ├── core/
+│   │   ├── modules/
+│   │   └── integrations/
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard/
+│   │   │   ├── Theme/
+│   │   │   │   └── ThemeSelector.jsx
+│   │   │   ├── Language/
+│   │   │   │   └── LanguageSelector.jsx
+│   │   │   └── Visualizations/
+│   │   │       ├── AttackGraph.jsx
+│   │   │       └── ThreatTimeline.jsx
+│   │   ├── contexts/
+│   │   │   └── ThemeContext.jsx
+│   │   ├── i18n/
+│   │   │   ├── index.js
+│   │   │   └── locales/
+│   │   │       ├── en.json
+│   │   │       ├── ms.json
+│   │   │       └── ... (10 languages)
+│   │   └── App.jsx
+│   ├── Dockerfile
+│   └── package.json
+├── mobile/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   │   └── ThemeContext.js
+│   │   ├── screens/
+│   │   ├── services/
+│   │   │   ├── biometrics.js
+│   │   │   ├── offlineManager.js
+│   │   │   └── notifications.js
+│   │   ├── hooks/
+│   │   │   └── useOfflineAwareQuery.js
+│   │   └── App.js
+│   ├── ios/
+│   ├── android/
+│   └── package.json
+├── docker-compose.yml
+├── install.sh
+└── README.md
