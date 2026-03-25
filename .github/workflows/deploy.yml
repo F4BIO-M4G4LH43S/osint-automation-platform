@@ -1,0 +1,72 @@
+name: Deploy OSINT Platform
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/osint-platform
+            git pull origin main
+            docker-compose pull
+            docker-compose up -d --build
+            docker system prune -f
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./frontend
+
+  build-mobile:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          cd mobile
+          npm install
+          cd ios && pod install
+      
+      - name: Build iOS
+        run: |
+          cd mobile/ios
+          xcodebuild -workspace OSINTPlatform.xcworkspace \
+            -scheme OSINTPlatform \
+            -configuration Release \
+            -archivePath $PWD/build/OSINTPlatform.xcarchive \
+            clean archive
+      
+      - name: Upload to App Store
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: mobile/ios/build/OSINTPlatform.xcarchive
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
