@@ -1,0 +1,227 @@
+# OSINT Automation Platform Configuration
+# Copy this file to config.yaml and fill in your API keys
+
+platform:
+  name: "OSINT Automation Platform"
+  version: "1.0.0"
+  debug: false
+  log_level: INFO
+  log_dir: "./logs"
+  data_dir: "./data"
+  
+  # Security settings
+  secret_key: "change-this-to-random-string-in-production"
+  jwt_algorithm: "HS256"
+  jwt_expiration: 3600  # 1 hour
+  
+  # Rate limiting
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+
+# API Keys for OSINT Sources
+api_keys:
+  shodan:
+    key: "YOUR_SHODAN_API_KEY"
+    enabled: true
+    rate_limit: 1  # requests per second
+    
+  virustotal:
+    key: "YOUR_VIRUSTOTAL_API_KEY"
+    enabled: true
+    rate_limit: 4  # requests per minute (free tier)
+    
+  censys:
+    id: "YOUR_CENSYS_API_ID"
+    secret: "YOUR_CENSYS_API_SECRET"
+    enabled: false
+    
+  securitytrails:
+    key: "YOUR_SECURITYTRAILS_API_KEY"
+    enabled: false
+    
+  urlscan:
+    key: "YOUR_URLSCAN_API_KEY"
+    enabled: false
+
+# Database Configuration
+database:
+  type: sqlite  # sqlite, postgresql, mysql
+  connection:
+    sqlite:
+      path: "./data/osint.db"
+    postgresql:
+      host: localhost
+      port: 5432
+      database: osint
+      user: osint
+      password: "secure-password-here"
+      ssl_mode: require
+
+# Scanning Defaults
+scanning:
+  default_modules:
+    - dns
+    - whois
+    - crtsh
+    
+  timeout: 30  # seconds per request
+  
+  # Concurrency settings
+  max_workers: 10
+  
+  # WordPress specific
+  wordpress:
+    check_version: true
+    enumerate_plugins: true
+    enumerate_themes: true
+    check_vulns: true
+    vuln_db_url: "https://wpscan.com/api/v3/wordpresses/"
+    
+  # DNS settings
+  dns:
+    resolvers:
+      - 8.8.8.8
+      - 1.1.1.1
+      - 9.9.9.9
+    record_types:
+      - A
+      - AAAA
+      - MX
+      - NS
+      - TXT
+      - SOA
+      - CNAME
+
+# SIEM Integration
+siem:
+  splunk:
+    enabled: false
+    host: "splunk.example.com"
+    port: 8088
+    token: "splunk-hec-token"
+    index: "security"
+    sourcetype: "osint:recon"
+    ssl_verify: true
+    
+  sentinel:
+    enabled: false
+    workspace_id: "workspace-id"
+    shared_key: "shared-key"
+    log_type: "OSINT_Recon"
+    
+  elastic:
+    enabled: false
+    hosts:
+      - "https://elastic.example.com:9200"
+    username: "osint"
+    password: "password"
+    index_prefix: "osint-"
+    ssl_verify: true
+    
+  qradar:
+    enabled: false
+    host: "qradar.example.com"
+    api_key: "api-key"
+    ssl_verify: true
+
+# SOAR Integration
+soar:
+  phantom:
+    enabled: false
+    host: "phantom.example.com"
+    token: "phantom-token"
+    verify_ssl: true
+    
+  xsoar:
+    enabled: false
+    host: "xsoar.example.com"
+    api_key: "xsoar-api-key"
+    
+  tines:
+    enabled: false
+    webhook_url: "https://tines.example.com/webhook"
+    secret: "webhook-secret"
+
+# Ticketing Integration
+ticketing:
+  servicenow:
+    enabled: false
+    instance: "instance.service-now.com"
+    username: "osint"
+    password: "password"
+    table: "sn_si_incident"
+    
+  jira:
+    enabled: false
+    server: "https://jira.example.com"
+    username: "osint@example.com"
+    token: "jira-api-token"
+    project: "SEC"
+
+# Notification Settings
+notifications:
+  slack:
+    enabled: false
+    webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    channel: "#security-alerts"
+    
+  email:
+    enabled: false
+    smtp_host: "smtp.example.com"
+    smtp_port: 587
+    username: "alerts@example.com"
+    password: "password"
+    from: "OSINT Platform <alerts@example.com>"
+    to:
+      - "security@example.com"
+      
+  webhook:
+    enabled: false
+    url: "https://your-webhook-endpoint.com/osint"
+    secret: "webhook-secret"
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  
+  # Targets to monitor continuously
+  targets:
+    - domain: "example.com"
+      interval: "24h"
+      modules: ["dns", "crtsh", "shodan"]
+      alert_on_changes: true
+      
+    - domain: "critical-app.example.com"
+      interval: "6h"
+      modules: ["all"]
+      alert_on_changes: true
+      
+  # Change detection
+  change_detection:
+    enabled: true
+    fields:
+      - new_subdomains
+      - new_dns_records
+      - new_shodan_services
+      - certificate_changes
+      - reputation_changes
+
+# Output Formats
+output:
+  formats:
+    - json
+    - csv
+    - markdown
+    - html
+    
+  # Default fields to include in reports
+  default_fields:
+    - timestamp
+    - target
+    - module
+    - finding_type
+    - severity
+    - description
+    - evidence
+    - remediation

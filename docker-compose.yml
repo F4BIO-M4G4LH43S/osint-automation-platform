@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  osint-platform:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: osint-platform
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config:ro
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    networks:
+      - osint-network
+
+  osint-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: osint-worker
+    command: celery -A osint_platform.tasks worker --loglevel=info
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config:ro
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    networks:
+      - osint-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: osint-redis
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - osint-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: osint-postgres
+    environment:
+      POSTGRES_DB: osint
+      POSTGRES_USER: osint
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - osint-network
+
+volumes:
+  redis-data:
+  postgres-data:
+
+networks:
+  osint-network:
+    driver: bridge
