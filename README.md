@@ -38,7 +38,9 @@ or
 Docker Deployment
 
 git clone https://F4BIO-M4G4LH43S/osint-automation-platform.git
+
 cd osint-automation-platform
+
 docker-compose up -d
 
 Access:
