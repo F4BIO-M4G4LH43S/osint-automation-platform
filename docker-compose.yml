@@ -1,66 +1,120 @@
 version: '3.8'
 
 services:
-  osint-platform:
+  # Backend API
+  api:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    container_name: osint-platform
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: osint-api
     ports:
       - "8000:8000"
-    volumes:
-      - ./data:/app/data
-      - ./logs:/app/logs
-      - ./config:/app/config:ro
     environment:
+      - DATABASE_URL=postgresql://osint:password@postgres:5432/osint
+      - REDIS_URL=redis://redis:6379
       - CONFIG_PATH=/app/config/config.yaml
-      - PYTHONPATH=/app
-    restart: unless-stopped
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/logs:/app/logs
+      - ./backend/config:/app/config:ro
+    depends_on:
+      - postgres
+      - redis
     networks:
       - osint-network
 
-  osint-worker:
+  # Frontend (React)
+  frontend:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    container_name: osint-worker
-    command: celery -A osint_platform.tasks worker --loglevel=info
-    volumes:
-      - ./data:/app/data
-      - ./logs:/app/logs
-      - ./config:/app/config:ro
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: osint-frontend
+    ports:
+      - "3000:80"
     environment:
-      - CONFIG_PATH=/app/config/config.yaml
-      - PYTHONPATH=/app
-    restart: unless-stopped
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8000
+    depends_on:
+      - api
     networks:
       - osint-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: osint-redis
-    volumes:
-      - redis-data:/data
-    restart: unless-stopped
-    networks:
-      - osint-network
-
+  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
     container_name: osint-postgres
     environment:
       POSTGRES_DB: osint
       POSTGRES_USER: osint
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - osint-network
+
+  # Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: osint-redis
+    volumes:
+      - redis-data:/data
+    networks:
+      - osint-network
+
+  # Celery Worker
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: osint-worker
+    command: celery -A osint_platform.tasks worker --loglevel=info --concurrency=4
+    environment:
+      - DATABASE_URL=postgresql://osint:password@postgres:5432/osint
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend/logs:/app/logs
+    networks:
+      - osint-network
+
+  # Celery Beat (Scheduler)
+  scheduler:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: osint-scheduler
+    command: celery -A osint_platform.tasks beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://osint:password@postgres:5432/osint
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - osint-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: osint-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - api
+      - frontend
     networks:
       - osint-network
 
 volumes:
-  redis-data:
   postgres-data:
+  redis-data:
 
 networks:
   osint-network:
