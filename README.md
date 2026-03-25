@@ -38,3 +38,72 @@ Enterprise-grade Open Source Intelligence (OSINT) automation platform with web d
 ### One-Line Installation
 ```bash
 curl -fsSL https://raw.githubusercontent.com/F4BIO-M4G4LH43S/osint-automation-platform/main/install.sh | sudo bash
+
+or
+
+Docker Deployment
+bash
+Copy
+
+git clone https://github.com/YOUR_USERNAME/osint-automation-platform.git
+cd osint-automation-platform
+docker-compose up -d
+
+Access:
+
+    Web Dashboard: http://localhost
+    API Docs: http://localhost/api/docs
+    Mobile: Download from App Store / Play Store
+
+📱 Mobile App Features
+Table
+Feature	iOS	Android
+Biometric Login	Face ID, Touch ID	Fingerprint, Face Unlock
+Offline Mode	✅	✅
+Push Notifications	✅	✅
+Dark Mode	✅	✅
+Multiple Languages	✅	✅
+🌍 Supported Languages
+Table
+Language
+English	en
+Bahasa Melayu	ms
+Bahasa Indonesia	id
+
+العربية  ar
+中文	zh
+日本語	ja
+한국어	ko
+Español	es
+Français	fr
+Deutsch	de
+Português	pt
+🛡️ Security Features
+
+    Data Encryption: At-rest and in-transit encryption
+    Biometric Protection: Hardware-backed keystore on mobile
+    Audit Logging: Complete activity tracking
+    Role-Based Access: Admin, analyst, viewer roles
+
+📊 Visualization Examples
+Attack Path Graph
+JavaScript
+Copy
+
+<AttackGraph data={networkData} width={800} height={600} />
+
+Threat Timeline
+JavaScript
+Copy
+
+<ThreatTimeline data={threats} onBrush={handleTimeRange} />
+
+🤝 Contributing
+We welcome contributions! Please see CONTRIBUTING.md for guidelines.
+📄 License
+MIT License - see LICENSE file.
+🙏 Acknowledgments
+
+    Shodan, VirusTotal, Crt.sh for API access
+    React, React Native, FastAPI communities
+    Security researchers worldwide
