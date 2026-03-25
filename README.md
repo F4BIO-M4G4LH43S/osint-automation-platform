@@ -36,10 +36,8 @@ Enterprise-grade Open Source Intelligence (OSINT) automation platform with web d
 or
 
 Docker Deployment
-bash
-Copy
 
-git clone https://github.com/YOUR_USERNAME/osint-automation-platform.git
+git clone https://F4BIO-M4G4LH43S/osint-automation-platform.git
 cd osint-automation-platform
 docker-compose up -d
 
@@ -49,28 +47,6 @@ Access:
     API Docs: http://localhost/api/docs
     Mobile: Download from App Store / Play Store
 
-📱 Mobile App Features
-Table
-Feature	iOS	Android
-Biometric Login	Face ID, Touch ID	Fingerprint, Face Unlock
-Offline Mode	✅	✅
-Push Notifications	✅	✅
-Dark Mode	✅	✅
-
-Multiple Languages	✅	✅
-🌍 Supported Languages
-English	en
-Bahasa Melayu	ms
-Bahasa Indonesia	id
-
-العربية  ar
-中文	zh
-日本語	ja
-한국어	ko
-Español	es
-Français	fr
-Deutsch	de
-Português	pt
 
 🛡️ Security Features
 
@@ -81,22 +57,17 @@ Português	pt
 
 
 📊 Visualization Examples
-Attack Path Graph
-JavaScript
-Copy
-
+Attack Path Graph in JavaScript
 <AttackGraph data={networkData} width={800} height={600} />
 
-Threat Timeline
-JavaScript
-Copy
-
+Threat Timeline in JavaScript
 <ThreatTimeline data={threats} onBrush={handleTimeRange} />
 
 🤝 Contributing
 We welcome contributions! Please see CONTRIBUTING.md for guidelines.
 📄 License
 MIT License - see LICENSE file.
+
 🙏 Acknowledgments
 
     Shodan, VirusTotal, Crt.sh for API access
