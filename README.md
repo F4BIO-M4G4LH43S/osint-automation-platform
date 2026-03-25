@@ -33,20 +33,20 @@ Enterprise-grade Open Source Intelligence (OSINT) automation platform with web d
 - **Push Notifications**: Real-time alerts for critical findings
 - **Offline Mode**: Full functionality without internet connection
 
-or
+🛡️ Docker Deployment
 
-Docker Deployment
+    git clone https://F4BIO-M4G4LH43S/osint-automation-platform.git
+    
+    cd osint-automation-platform
+    
+    docker-compose up -d
 
-git clone https://F4BIO-M4G4LH43S/osint-automation-platform.git
-
-cd osint-automation-platform
-
-docker-compose up -d
-
-Access:
+🛡️ Access:
 
     Web Dashboard: http://localhost
+    
     API Docs: http://localhost/api/docs
+    
     Mobile: Download from App Store / Play Store
 
 
@@ -62,7 +62,7 @@ Access:
 Attack Path Graph in JavaScript
 <AttackGraph data={networkData} width={800} height={600} />
 
-Threat Timeline in JavaScript
+📊 Threat Timeline in JavaScript
 <ThreatTimeline data={threats} onBrush={handleTimeRange} />
 
 🤝 Contributing
