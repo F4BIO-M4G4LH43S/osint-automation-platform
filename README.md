@@ -33,12 +33,6 @@ Enterprise-grade Open Source Intelligence (OSINT) automation platform with web d
 - **Push Notifications**: Real-time alerts for critical findings
 - **Offline Mode**: Full functionality without internet connection
 
-## 🚀 Quick Start
-
-### One-Line Installation
-```bash
-curl -fsSL https://raw.githubusercontent.com/F4BIO-M4G4LH43S/osint-automation-platform/main/install.sh | sudo bash
-
 or
 
 Docker Deployment
@@ -62,10 +56,9 @@ Biometric Login	Face ID, Touch ID	Fingerprint, Face Unlock
 Offline Mode	✅	✅
 Push Notifications	✅	✅
 Dark Mode	✅	✅
+
 Multiple Languages	✅	✅
 🌍 Supported Languages
-Table
-Language
 English	en
 Bahasa Melayu	ms
 Bahasa Indonesia	id
@@ -78,12 +71,14 @@ Español	es
 Français	fr
 Deutsch	de
 Português	pt
+
 🛡️ Security Features
 
     Data Encryption: At-rest and in-transit encryption
     Biometric Protection: Hardware-backed keystore on mobile
     Audit Logging: Complete activity tracking
     Role-Based Access: Admin, analyst, viewer roles
+
 
 📊 Visualization Examples
 Attack Path Graph
@@ -107,3 +102,9 @@ MIT License - see LICENSE file.
     Shodan, VirusTotal, Crt.sh for API access
     React, React Native, FastAPI communities
     Security researchers worldwide
+
+## 🚀 Quick Start
+
+### One-Line Installation
+```bash
+curl -fsSL https://raw.githubusercontent.com/F4BIO-M4G4LH43S/osint-automation-platform/main/install.sh | sudo bash
